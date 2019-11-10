@@ -86,7 +86,7 @@ def group_reply_text(msg):
 	username = msg['ActualNickName']
 
 	#获取群名
-	group_name= chatroom_info.get(chatroom_id)
+	group_name = chatroom_info.get(chatroom_id)
 
 	if msg['Type'] == TEXT:
 		content = msg['Content']
@@ -101,7 +101,7 @@ def group_reply_text(msg):
 				if is_self:
 					msg_new = itchat.send(msg['Content'], item['UserName'])
 				else:
-					msg_new = itchat.send('%s—%s 说:\n%s' % (group_name,username, msg['Content']), item['UserName'])
+					msg_new = itchat.send('%s—%s 说:\n%s' % (group_name, username, msg['Content']), item['UserName'])
 				msg_dict.get(msg_id).get("forward_msgs").append({"chatroom": item, "msg":msg_new})
 	elif msg['Type'] == SHARING:
 		for item in chatrooms:
@@ -110,7 +110,7 @@ def group_reply_text(msg):
 				if is_self:
 					msg_new = itchat.send('%s\n%s' % (msg['Text'], msg['Url']), item['UserName'])
 				else:
-					msg_new = itchat.send('%s-%s 分享：\n%s\n%s' % (group_name,username, msg['Text'], msg['Url']), item['UserName'])
+					msg_new = itchat.send('%s-%s 分享：\n%s\n%s' % (group_name, username, msg['Text'], msg['Url']), item['UserName'])
 				msg_dict.get(msg_id).get("forward_msgs").append({"chatroom": item, "msg":msg_new})
 
 
@@ -138,6 +138,8 @@ def group_reply_media(msg):
 	if not chatroom_id in chatroom_ids:
 		return
 
+	#获取群名
+	group_name = chatroom_info.get(chatroom_id)
 	# 如果为gif图片则不转发
 #	if msg['FileName'][-4:] == '.gif':
 #		return
@@ -149,6 +151,7 @@ def group_reply_media(msg):
 		if not item['UserName'] == chatroom_id:
 			statinfo = os.stat(msg['FileName'])
 			if statinfo.st_size != 0:
+				msg_new = itchat.send('以下图片源自 %s—%s' % (group_name, username), item['UserName'])
 				msg_new = itchat.send('@%s@%s' % ({'Picture': 'img', 'Video': 'vid'}.get(msg['Type'], 'fil'), msg['FileName']), item['UserName'])
 				msg_dict.get(msg_id).get("forward_msgs").append({"chatroom": item, "msg":msg_new})
 

@@ -24,7 +24,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 build:
-	docker build -t wew036:wechat-big-group .
+	docker build -t wew036/wechat-big-group .
 
 install:
 	docker login
